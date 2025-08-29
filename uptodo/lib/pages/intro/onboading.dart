@@ -16,8 +16,6 @@ class _OnboadingState extends State<Onboading> {
       setState(() {
         currentPage++;
       });
-    } else {
-      print('Derniere page');
     }
   }
 
@@ -25,10 +23,7 @@ class _OnboadingState extends State<Onboading> {
     if (currentPage > 0) {
       setState(() {
         currentPage--; // reculer d’une page
-        print(currentPage);
       });
-    } else {
-      print('Première page atteinte');
     }
   }
 

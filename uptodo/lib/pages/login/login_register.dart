@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/pages/home_page.dart';
 
 class LoginRegister extends StatefulWidget {
   const LoginRegister({super.key});
@@ -8,6 +9,7 @@ class LoginRegister extends StatefulWidget {
 }
 
 class _LoginRegisterState extends State<LoginRegister> {
+  bool islogin = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class _LoginRegisterState extends State<LoginRegister> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Text('<', style: TextStyle(fontSize: 24, color: Colors.grey)),
+          icon: Image.asset('assets/images/BackButton.png'),
         ),
       ),
       body: SingleChildScrollView(
@@ -26,9 +28,11 @@ class _LoginRegisterState extends State<LoginRegister> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 24),
+                padding: islogin
+                    ? const EdgeInsets.only(left: 24, top: 41)
+                    : const EdgeInsets.only(left: 24, top: 16),
                 child: Text(
-                  'Login',
+                  islogin ? 'Login' : 'Register',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
@@ -37,7 +41,9 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 53, left: 24, right: 24),
+                padding: islogin
+                    ? const EdgeInsets.only(top: 53, left: 24, right: 24)
+                    : const EdgeInsets.only(top: 23, left: 24, right: 24),
                 child: SizedBox(
                   width: 327,
                   child: Column(
@@ -101,8 +107,44 @@ class _LoginRegisterState extends State<LoginRegister> {
                   ),
                 ),
               ),
+              if (!islogin)
+                Padding(
+                  padding: const EdgeInsets.only(top: 25, left: 24, right: 24),
+                  child: SizedBox(
+                    width: 327,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Password',
+                          style: TextStyle(
+                            color: Color(0xffFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: "...............",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              borderSide: BorderSide(
+                                color: Color(0xff535353),
+                                width: 0.8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               Padding(
-                padding: const EdgeInsets.only(top: 69, left: 24, right: 24),
+                padding: islogin
+                    ? const EdgeInsets.only(top: 69, left: 24, right: 24)
+                    : const EdgeInsets.only(top: 40, left: 24, right: 24),
                 child: SizedBox(
                   width: 327,
                   height: 48,
@@ -110,9 +152,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginRegister(),
-                        ),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -123,7 +163,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                       ),
                     ),
                     child: Text(
-                      'LOGIN',
+                      islogin ? 'LOGIN' : 'Register',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -133,14 +173,143 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 31, left: 24, right: 24),
+                padding: islogin
+                    ? EdgeInsets.only(top: 31, left: 24, right: 24)
+                    : const EdgeInsets.only(top: 18, left: 24, right: 24),
                 child: SizedBox(
                   child: Row(
                     children: [
                       Container(width: 154, height: 1, color: Colors.grey),
                       Text('or', style: TextStyle(color: Colors.grey)),
-                      Container(width: 153, color: Colors.grey),
+                      Container(width: 154, height: 1, color: Colors.grey),
                     ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: islogin
+                    ? const EdgeInsets.only(top: 29, left: 24, right: 24)
+                    : const EdgeInsets.only(top: 24, left: 24, right: 24),
+                child: SizedBox(
+                  width: 327,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff121212), // fond blanc
+                      foregroundColor: Colors.white, // texte noir
+                      side: BorderSide(
+                        color: Color(0xff8875FF),
+                        width: 1,
+                      ), // bordure
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/images/google_logo.png', // logo Google multicolore
+                          height: 24,
+                          width: 24,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          "Login with Google",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFFFFFFDE),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: islogin
+                    ? EdgeInsets.only(top: 20, left: 24, right: 24)
+                    : const EdgeInsets.only(top: 17, left: 24, right: 24),
+                child: SizedBox(
+                  width: 327,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff121212),
+                      foregroundColor: Colors.white,
+                      side: BorderSide(
+                        color: Color(0xff8875FF),
+                        width: 1,
+                      ), // bordure
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/images/apple_logo.png',
+                          height: 24,
+                          width: 24,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          "Login with Apple",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFFFFFFDE),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: islogin
+                    ? EdgeInsetsGeometry.only(left: 104, top: 46, right: 104)
+                    : EdgeInsetsGeometry.only(left: 104, top: 38, right: 104),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      islogin = !islogin;
+                    });
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don’t have an account? ",
+                      style: TextStyle(
+                        color: Colors.grey, // couleur du premier texte
+                        fontSize: 12,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: islogin ? "Register" : 'Login',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFFFFFFDE),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

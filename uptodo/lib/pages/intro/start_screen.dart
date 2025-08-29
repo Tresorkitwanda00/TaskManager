@@ -18,7 +18,7 @@ class _StartScreenState extends State<StartScreen> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Text('<', style: TextStyle(fontSize: 24, color: Colors.grey)),
+          icon: Image.asset('assets/images/BackButton.png'),
         ),
       ),
       body: Column(
@@ -72,7 +72,7 @@ class _StartScreenState extends State<StartScreen> {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0x121212),
+                backgroundColor: Color(0xff121212),
                 foregroundColor: Colors.white,
                 side: BorderSide(color: Color(0xff8E7CFF), width: 2),
                 shape: RoundedRectangleBorder(
