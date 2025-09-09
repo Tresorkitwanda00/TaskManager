@@ -128,7 +128,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
   }
 
   Widget _buildTimePickerView() {
-    return Container(
+    return SizedBox(
       height: 206,
       width: 327,
       child: Column(

@@ -147,8 +147,7 @@ class _FormAddCategoryState extends State<FormAddCategory> {
                             spacing: 8,
                             children: colors.map((color) {
                               final bool isSelected =
-                                  selectedColor.value ==
-                                  color.value; // ✅ compare value
+                                  selectedColor.value == color.value; //
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {

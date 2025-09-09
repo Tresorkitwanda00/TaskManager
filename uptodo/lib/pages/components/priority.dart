@@ -114,7 +114,6 @@ class _PriorityState extends State<Priority> {
                       ),
                     ),
                     onPressed: () {
-                      print('vous avez choisi $selectedPriority');
                       Navigator.pop(context, selectedPriority);
                     },
                     child: const Text(
@@ -133,6 +132,5 @@ class _PriorityState extends State<Priority> {
         ),
       ),
     );
-    ;
   }
 }

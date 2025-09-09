@@ -56,12 +56,7 @@ class CategoryModel extends StatelessWidget {
                   final Category = categpries[index];
                   return GestureDetector(
                     onTap: () {
-                      if (Category.name == 'Create New') {
-                        print('okay');
-                      } else {
-                        print(Category);
-                        Navigator.pop(context, Category);
-                      }
+                      Navigator.pop(context, Category);
                     },
                     child: Column(
                       children: [

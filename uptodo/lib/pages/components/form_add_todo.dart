@@ -81,10 +81,6 @@ class _FormAddTodoState extends State<FormAddTodo> {
                           context: context,
                           builder: (_) => CategoryModel(),
                         );
-
-                        if (chosen != null) {
-                          print("Tu as choisi : ${chosen.name}");
-                        }
                       },
                       icon: Image.asset('assets/images/timer.png'),
                     ),
@@ -103,11 +99,7 @@ class _FormAddTodoState extends State<FormAddTodo> {
                           showDialog(
                             context: context,
                             builder: (context) => const CalendarDialog(),
-                          ).then((selectedDay) {
-                            if (selectedDay != null) {
-                              print("Jour choisi : $selectedDay");
-                            }
-                          });
+                          ).then((selectedDay) {});
                         },
                         icon: Image.asset('assets/images/send.png'),
                       ),
