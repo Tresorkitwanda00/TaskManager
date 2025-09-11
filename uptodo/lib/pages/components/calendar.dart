@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
-  const CalendarDialog({super.key});
+  final bool isEditing;
+  const CalendarDialog({super.key, required this.isEditing});
 
   @override
   State<CalendarDialog> createState() => _CalendarDialogState();
@@ -112,8 +113,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 ),
               ),
               onPressed: () => setState(() => isCalendar = false),
-              child: const Text(
-                "Choose Time",
+              child: Text(
+                (widget.isEditing == true) ? "Choose Time" : 'Edit Time',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -246,8 +247,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')} $period",
                     );
                   },
-                  child: const Text(
-                    "Save",
+                  child: Text(
+                    (widget.isEditing == true) ? "Save" : 'Edit',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

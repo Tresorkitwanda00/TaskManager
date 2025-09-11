@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/pages/dashboard_screen.dart';
 import 'package:uptodo/pages/home_page.dart';
 
 class LoginRegister extends StatefulWidget {
@@ -152,7 +153,9 @@ class _LoginRegisterState extends State<LoginRegister> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(
+                          builder: (context) => DashboardScreen(),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -255,12 +258,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                         horizontal: 16,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
+                    onPressed: () {},
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

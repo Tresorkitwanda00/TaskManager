@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Priority extends StatefulWidget {
   final int currentPriority;
-  Priority({this.currentPriority = 1});
+  final bool isEditing;
+  Priority({this.currentPriority = 1, required this.isEditing});
 
   @override
   State<Priority> createState() => _PriorityState();
@@ -116,8 +117,8 @@ class _PriorityState extends State<Priority> {
                     onPressed: () {
                       Navigator.pop(context, selectedPriority);
                     },
-                    child: const Text(
-                      "save",
+                    child: Text(
+                      widget.isEditing ? "save" : 'Edit',
                       style: TextStyle(
                         color: Color(0xFFFFFFDE),
                         fontSize: 16,

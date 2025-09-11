@@ -12,7 +12,17 @@ class FormAddTodo extends StatefulWidget {
 
 class _FormAddTodoState extends State<FormAddTodo> {
   void showPriority() {
-    showDialog(context: context, builder: (context) => Priority());
+    showDialog(
+      context: context,
+      builder: (context) => Priority(isEditing: true),
+    );
+  }
+
+  void showCalendar() {
+    showDialog(
+      context: context,
+      builder: (context) => CalendarDialog(isEditing: false),
+    );
   }
 
   @override
@@ -31,6 +41,7 @@ class _FormAddTodoState extends State<FormAddTodo> {
         child: Form(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: EdgeInsetsGeometry.only(left: 25, top: 14),
@@ -76,16 +87,16 @@ class _FormAddTodoState extends State<FormAddTodo> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
-                      onPressed: () async {
-                        final chosen = await showDialog<Category>(
-                          context: context,
-                          builder: (_) => CategoryModel(),
-                        );
-                      },
+                      onPressed: showCalendar,
                       icon: Image.asset('assets/images/timer.png'),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await showDialog<Category>(
+                          context: context,
+                          builder: (_) => CategoryModel(isEditing: true),
+                        );
+                      },
                       icon: Image.asset('assets/images/tag.png'),
                     ),
                     IconButton(
@@ -98,7 +109,8 @@ class _FormAddTodoState extends State<FormAddTodo> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) => const CalendarDialog(),
+                            builder: (context) =>
+                                const CalendarDialog(isEditing: false),
                           ).then((selectedDay) {});
                         },
                         icon: Image.asset('assets/images/send.png'),
