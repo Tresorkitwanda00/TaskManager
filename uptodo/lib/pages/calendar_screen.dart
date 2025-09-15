@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uptodo/data/data.dart';
-import 'package:uptodo/pages/home_page.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -15,9 +14,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   DateTime _currentMonth = DateTime.now();
   final Map<int, FixedExtentScrollController> _controllers = {};
   final data = Data();
+  bool? iscompleted;
   @override
   void initState() {
     super.initState();
+    iscompleted = true;
     for (int i = 1; i <= 7; i++) {
       _controllers[i] = FixedExtentScrollController(initialItem: 0);
     }
@@ -69,7 +70,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 
-  bool? iscompleted;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

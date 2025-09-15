@@ -1,7 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/pages/components/edit_profil.dart';
+import 'package:uptodo/pages/components/edit_setting.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String usernameTitle = "Change account name";
+  String passwordTitle = "Change account Password";
+  void showEditingUsernamePass(bool isPassOrUser) {
+    showDialog(
+      context: context,
+      builder: (context) => FormEditInfoUser(
+        isUsernameOrPass: isPassOrUser,
+        initialText: isPassOrUser ? usernameTitle : passwordTitle,
+        onSave: (newValue) {
+          setState(() {
+            if (isPassOrUser) {
+              newValue = usernameTitle;
+            } else {
+              newValue = passwordTitle;
+            }
+          });
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +172,7 @@ class Profile extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 6),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () => showEditingUsernamePass(true),
                 child: ListTile(
                   leading: Icon(Icons.person, size: 24, color: Colors.white),
                   title: Text(
@@ -167,7 +195,7 @@ class Profile extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 6),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () => showEditingUsernamePass(false),
                 child: ListTile(
                   leading: Icon(Icons.key, size: 24, color: Colors.white),
                   title: Text(
@@ -190,7 +218,14 @@ class Profile extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 6),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SnackBar(content: EditProfil());
+                    },
+                  );
+                },
                 child: ListTile(
                   leading: Icon(
                     Icons.camera_alt_outlined,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:uptodo/pages/dashboard_screen.dart';
-import 'package:uptodo/pages/home_page.dart';
 
 class LoginRegister extends StatefulWidget {
   const LoginRegister({super.key});
@@ -62,6 +61,10 @@ class _LoginRegisterState extends State<LoginRegister> {
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter your Username",
+                          hintStyle: TextStyle(
+                            color: Colors.grey, // Change ici la couleur
+                            fontStyle: FontStyle.italic,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: BorderSide(
@@ -70,6 +73,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                             ),
                           ),
                         ),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
@@ -95,6 +99,10 @@ class _LoginRegisterState extends State<LoginRegister> {
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: "...............",
+                          hintStyle: TextStyle(
+                            color: Colors.grey, // Change ici la couleur
+                            fontStyle: FontStyle.italic,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                             borderSide: BorderSide(
@@ -103,6 +111,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                             ),
                           ),
                         ),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
@@ -129,6 +138,10 @@ class _LoginRegisterState extends State<LoginRegister> {
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: "...............",
+                            hintStyle: TextStyle(
+                              color: Colors.grey, // Change ici la couleur
+                              fontStyle: FontStyle.italic,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4),
                               borderSide: BorderSide(
@@ -137,6 +150,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                               ),
                             ),
                           ),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ],
                     ),

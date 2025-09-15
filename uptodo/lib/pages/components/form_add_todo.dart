@@ -56,10 +56,14 @@ class _FormAddTodoState extends State<FormAddTodo> {
               ),
 
               Padding(
-                padding: EdgeInsetsGeometry.only(left: 25, top: 14, right: 26),
+                padding: EdgeInsets.only(left: 25, top: 14, right: 26),
                 child: TextFormField(
                   decoration: InputDecoration(
                     hintText: "My task",
+                    hintStyle: TextStyle(
+                      color: Colors.grey, // Change ici la couleur
+                      fontStyle: FontStyle.italic,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
                       borderSide: BorderSide(
@@ -68,6 +72,7 @@ class _FormAddTodoState extends State<FormAddTodo> {
                       ),
                     ),
                   ),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
               Padding(

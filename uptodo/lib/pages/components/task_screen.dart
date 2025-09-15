@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/android.dart';
 import 'package:uptodo/pages/components/category.dart';
 import 'package:uptodo/pages/components/delete.dart';
 import 'package:uptodo/pages/components/form_edit_task.dart';
