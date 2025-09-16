@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:uptodo/pages/components/form_add_category.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uptodo/models/categorie.dart';
+import 'package:uptodo/services/categorie_controller.dart';
 
-//  Classe Category
-class Category {
-  final String name;
-  final IconData icon;
-  final Color color;
-
-  Category({required this.name, required this.icon, required this.color});
-}
-
+// 🔹 Widget principal
 class CategoryModel extends StatefulWidget {
   final bool isEditing;
 
@@ -20,21 +14,8 @@ class CategoryModel extends StatefulWidget {
 }
 
 class _CategoryModelState extends State<CategoryModel> {
-  Category? selectedCategory;
-  final List<Category> categories = [
-    Category(name: "Grocery", icon: Icons.shopping_cart, color: Colors.green),
-    Category(name: "Work", icon: Icons.work, color: Colors.blue),
-    Category(name: "Sport", icon: Icons.fitness_center, color: Colors.orange),
-    Category(name: "Design", icon: Icons.brush, color: Colors.purple),
-    Category(name: "University", icon: Icons.school, color: Colors.teal),
-    Category(name: "Social", icon: Icons.group, color: Colors.pink),
-    Category(name: "Music", icon: Icons.music_note, color: Colors.red),
-    Category(name: "Health", icon: Icons.favorite, color: Colors.greenAccent),
-    Category(name: "Movie", icon: Icons.movie, color: Colors.indigo),
-    Category(name: "Home", icon: Icons.home, color: Colors.deepOrange),
-    Category(name: "Create New", icon: Icons.add, color: Colors.grey),
-  ];
-
+  CategorieTask? selectedCategory;
+  CategorieController cls = CategorieController();
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -56,49 +37,69 @@ class _CategoryModelState extends State<CategoryModel> {
             const SizedBox(height: 2),
             Container(width: 327, color: const Color(0xff979797), height: 1),
             const SizedBox(height: 12),
+
+            // 🔹 Liste depuis Firestore
             Expanded(
-              child: GridView.builder(
-                itemCount: categories.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedCategory = category;
-                        Navigator.pop(context, selectedCategory);
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          color: category.color,
-                          child: Center(
-                            child: Icon(
-                              category.icon,
-                              size: 28,
-                              color: Colors.white,
+              child: StreamBuilder(
+                stream: cls.getCategories(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Text("Erreur : ${snapshot.error}");
+                  }
+                  final categories = snapshot.data ?? [];
+                  return GridView.builder(
+                    itemCount: categories.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = category;
+                            Navigator.pop(context, selectedCategory);
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              color: category.codeValue != 0
+                                  ? Color(category.codeValue)
+                                  : Color(0xffAFAFAF),
+                              child: Center(
+                                child: Icon(
+                                  category.iconCategory,
+                                  size: 28,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 5),
+                            Text(
+                              category.nameCategory,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          category.name,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 },
               ),
             ),
+
             const SizedBox(height: 10),
+
+            // 🔹 Boutons
             SizedBox(
               width: 289,
               child: (widget.isEditing == true)
@@ -110,12 +111,8 @@ class _CategoryModelState extends State<CategoryModel> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FormAddCategory(),
-                          ),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder:(context)=>
+                        form))
                       },
                       child: const Text(
                         "Add Category",

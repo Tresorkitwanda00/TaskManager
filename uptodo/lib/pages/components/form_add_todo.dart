@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uptodo/models/categorie.dart';
 import 'package:uptodo/pages/components/calendar.dart';
 import 'package:uptodo/pages/components/category.dart';
 import 'package:uptodo/pages/components/priority.dart';
@@ -97,7 +98,7 @@ class _FormAddTodoState extends State<FormAddTodo> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await showDialog<Category>(
+                        await showDialog<CategorieTask>(
                           context: context,
                           builder: (_) => CategoryModel(isEditing: true),
                         );

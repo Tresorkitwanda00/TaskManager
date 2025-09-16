@@ -15,12 +15,26 @@ class _CalendarScreenState extends State<CalendarScreen> {
   final Map<int, FixedExtentScrollController> _controllers = {};
   final data = Data();
   bool? iscompleted;
+  final Map<int, int> _selectedDayIndex = {};
   @override
   void initState() {
     super.initState();
     iscompleted = true;
     for (int i = 1; i <= 7; i++) {
-      _controllers[i] = FixedExtentScrollController(initialItem: 0);
+      final days = _daysForWeekday(_currentMonth, i);
+
+      int todayIndex = days.indexWhere(
+        (d) =>
+            d.day == DateTime.now().day &&
+            d.month == DateTime.now().month &&
+            d.year == DateTime.now().year,
+      );
+
+      _controllers[i] = FixedExtentScrollController(
+        initialItem: todayIndex >= 0 ? todayIndex : 0,
+      );
+
+      _selectedDayIndex[i] = todayIndex >= 0 ? todayIndex : 0;
     }
   }
 
@@ -129,7 +143,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         final days = _daysForWeekday(_currentMonth, weekday);
 
                         if (days.isEmpty) return const SizedBox.shrink();
-
+                        _selectedDayIndex.putIfAbsent(
+                          weekday,
+                          () => days.indexWhere(
+                            (d) =>
+                                d.day == DateTime.now().day &&
+                                d.month == DateTime.now().month &&
+                                d.year == DateTime.now().year,
+                          ),
+                        );
                         return Expanded(
                           child: Column(
                             children: [
@@ -145,32 +167,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               const SizedBox(height: 2),
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
-                                child: Expanded(
-                                  child: CupertinoPicker(
-                                    scrollController: _controllers[weekday],
-                                    itemExtent: 32,
-                                    backgroundColor: Colors.transparent,
-                                    onSelectedItemChanged: (selectedIndex) {
-                                      if (selectedIndex < days.length) {
-                                        debugPrint(
-                                          "Jour choisi : ${DateFormat.E().format(days[selectedIndex])} ${days[selectedIndex].day}",
-                                        );
-                                      }
-                                    },
-                                    children: days
-                                        .map(
-                                          (d) => Center(
-                                            child: Text(
-                                              "${d.day}",
-                                              style: const TextStyle(
-                                                color: Color(0xFFFFFFDE),
-                                                fontSize: 14,
-                                              ),
+                                child: CupertinoPicker(
+                                  scrollController: _controllers[weekday],
+                                  itemExtent: 32,
+                                  backgroundColor: Colors.transparent,
+                                  onSelectedItemChanged: (selectedIndex) {
+                                    setState(() {
+                                      _selectedDayIndex[weekday] =
+                                          selectedIndex;
+                                    });
+                                  },
+                                  children: days
+                                      .map(
+                                        (d) => Center(
+                                          child: Text(
+                                            "${d.day}",
+                                            style: TextStyle(
+                                              color: Color(0xFFFFFFDE),
+                                              fontSize: 14,
                                             ),
                                           ),
-                                        )
-                                        .toList(),
-                                  ),
+                                        ),
+                                      )
+                                      .toList(),
                                 ),
                               ),
                             ],
