@@ -12,7 +12,20 @@
           "package_name": "com.trezkit.uptodo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "242249454882-m6h1bk8n7jbujj8tqnj1v1mml8hptpaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trezkit.uptodo",
+            "certificate_hash": "309cf677d64aa6c3a0e8dfab0f431bf09cdd7dfc"
+          }
+        },
+        {
+          "client_id": "242249454882-m95ek08ttd10ckkqe4vkorvq8j1n3oj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCa9YQ6iJAVkq3AdpkFfGsaZzmt9LCn75c"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242249454882-m95ek08ttd10ckkqe4vkorvq8j1n3oj2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "242249454882-3s7i91gfkmk6qq917lvt1vandbkf0261.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.trezkit.uptodo"
+              }
+            }
+          ]
         }
       }
     }

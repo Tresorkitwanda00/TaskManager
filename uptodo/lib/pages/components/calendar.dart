@@ -35,7 +35,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       child: Container(
         padding: const EdgeInsets.all(16),
-        color: const Color(0xFF272727), // fond sombre
+        color: const Color(0xFF272727),
         child: isCalendar ? _buildCalendarView() : _buildTimePickerView(),
       ),
     );
@@ -95,7 +95,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              onPressed: () => Navigator.pop(context, _selectedDay),
+              onPressed: () => Navigator.pop(context, null),
               child: const Text(
                 "Cancel",
                 style: TextStyle(
@@ -114,8 +114,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
               ),
               onPressed: () => setState(() => isCalendar = false),
               child: Text(
-                (widget.isEditing == true) ? "Choose Time" : 'Edit Time',
-                style: TextStyle(
+                (widget.isEditing == false) ? "Choose Time" : 'Edit Time',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
@@ -135,9 +135,9 @@ class _CalendarDialogState extends State<CalendarDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Choose Time', style: TextStyle(color: Color(0xFFFFFFDE))),
+          const Text('Choose Time', style: TextStyle(color: Color(0xFFFFFFDE))),
           const SizedBox(height: 10),
-          Container(height: 1, color: Color(0xFFFFFFDE), width: 306),
+          Container(height: 1, color: const Color(0xFFFFFFDE), width: 306),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -242,14 +242,34 @@ class _CalendarDialogState extends State<CalendarDialog> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pop(
-                      context,
-                      "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')} $period",
+                    final chosenDay = _selectedDay ?? DateTime.now();
+
+                    int hour24 = (period == 'PM' && hours != 12)
+                        ? hours + 12
+                        : (period == 'AM' && hours == 12)
+                        ? 0
+                        : hours;
+
+                    final selectedDateTime = DateTime(
+                      chosenDay.year,
+                      chosenDay.month,
+                      chosenDay.day,
+                      hour24,
+                      minutes,
                     );
+                    if (selectedDateTime.isBefore(DateTime.now())) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('La date doit etre future')),
+                      );
+                      return;
+                    }
+
+                    Navigator.pop(context, selectedDateTime);
+                    print(selectedDateTime);
                   },
                   child: Text(
-                    (widget.isEditing == true) ? "Save" : 'Edit',
-                    style: TextStyle(
+                    (widget.isEditing == false) ? "Save" : 'Edit',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w400,

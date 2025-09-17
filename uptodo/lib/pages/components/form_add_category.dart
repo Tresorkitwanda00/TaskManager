@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:uptodo/models/categorie.dart';
+import 'package:uptodo/services/categorie_controller.dart';
 
 class FormAddCategory extends StatefulWidget {
   const FormAddCategory({super.key});
@@ -12,8 +14,14 @@ class FormAddCategory extends StatefulWidget {
 class _FormAddCategoryState extends State<FormAddCategory> {
   bool isIcon = true;
   IconData? _icon;
+
   Color selectedColor = Colors.green;
 
+  CategorieController cls = CategorieController();
+  final GlobalKey _globalKey = GlobalKey<FormState>();
+  final TextEditingController _nameCategory = TextEditingController();
+  int? codePoint = 0;
+  String? fontFamilly = '';
   Future<void> _pickIcon() async {
     IconData? icon = await showIconPicker(
       context,
@@ -24,6 +32,8 @@ class _FormAddCategoryState extends State<FormAddCategory> {
       setState(() {
         _icon = icon;
         isIcon = false; // on bascule pour afficher l'icône choisie
+        codePoint = icon.codePoint;
+        fontFamilly = icon.fontFamily;
       });
     }
   }
@@ -33,6 +43,7 @@ class _FormAddCategoryState extends State<FormAddCategory> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
+          key: _globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,8 +75,17 @@ class _FormAddCategoryState extends State<FormAddCategory> {
               Padding(
                 padding: const EdgeInsets.only(top: 16, left: 24, right: 24),
                 child: TextFormField(
+                  controller: _nameCategory,
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Please enter category name "
+                      : null,
                   decoration: InputDecoration(
                     hintText: "Enter category name",
+                    hintStyle: TextStyle(
+                      color: Colors.grey, // Change ici la couleur
+                      fontStyle: FontStyle.italic,
+                    ),
+
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
                       borderSide: const BorderSide(
@@ -74,6 +94,7 @@ class _FormAddCategoryState extends State<FormAddCategory> {
                       ),
                     ),
                   ),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
 
@@ -116,6 +137,7 @@ class _FormAddCategoryState extends State<FormAddCategory> {
                       : Icon(_icon ?? Icons.home, color: Colors.white),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 20, left: 24),
                 child: Text(
@@ -147,8 +169,7 @@ class _FormAddCategoryState extends State<FormAddCategory> {
                             spacing: 8,
                             children: colors.map((color) {
                               final bool isSelected =
-                                  // ignore: deprecated_member_use
-                                  selectedColor.value == color.value; //
+                                  selectedColor.toARGB32() == color.toARGB32();
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -221,7 +242,46 @@ class _FormAddCategoryState extends State<FormAddCategory> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_nameCategory.text.isNotEmpty && _icon != null) {
+                            final result = await cls.addCategory(
+                              CategorieTask(
+                                nameCategory: _nameCategory.text,
+                                color: selectedColor,
+                                iconCategory: {
+                                  'codePoint': codePoint,
+                                  'iconfamilly': fontFamilly ?? 'MaterialIcons',
+                                },
+                              ),
+                            );
+                            if (!mounted) {
+                              return;
+                            } // ⚠️ évite d’utiliser context si le widget est détruit
+
+                            switch (result) {
+                              case "saved":
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("✅ Catégorie sauvegardée"),
+                                  ),
+                                );
+                                break;
+                              case "exists":
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "⚠️ Catégorie déjà existante",
+                                    ),
+                                  ),
+                                );
+                                break;
+                              default:
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(result)));
+                            }
+                          }
+                        },
                         child: const Text(
                           "Create Category",
                           style: TextStyle(

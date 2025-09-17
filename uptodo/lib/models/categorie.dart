@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 
 class CategorieTask {
   final String nameCategory;
-  final int codeValue;
-  final IconData iconCategory;
+  final Color color;
+  final Map<String, dynamic> iconCategory;
 
   CategorieTask({
     required this.nameCategory,
-    required this.codeValue,
+    required this.color,
     required this.iconCategory,
   });
 
   /// 🔄 Factory : convertir les données Firestore -> Objet Dart
   factory CategorieTask.fromMap(Map<String, dynamic> data) {
-    assert(data['nameCategoy'] != null, "nameCategory manquant dans Firestore");
+    assert(
+      data['nameCategory'] != null,
+      "nameCategory manquant dans Firestore",
+    );
     assert(data['codeValue'] != null, "codeValue manquant dans Firestore");
     assert(
       data['iconCategory'] != null,
@@ -21,14 +24,12 @@ class CategorieTask {
     );
 
     return CategorieTask(
-      nameCategory: data['nameCategoy'] ?? 'Unknown',
-      codeValue: data['codeValue'] ?? 0,
-      iconCategory: data['iconCategory'] != null
-          ? IconData(
-              data['iconCategory']['codePoint'] ?? 0,
-              fontFamily: data['iconCategory']['iconFamily'] ?? 'MaterialIcons',
-            )
-          : Icons.help, // icône par défaut si null
+      nameCategory: data['nameCategory'] ?? 'Unknown',
+      color: Color(data['codeValue']),
+      iconCategory: {
+        'codePoint': data['iconCategory']['codePoint'],
+        'iconfamilly': data['iconCategory']['iconfamilly'] ?? 'MaterialIcons',
+      },
     );
   }
 
@@ -36,10 +37,10 @@ class CategorieTask {
   Map<String, dynamic> toMap() {
     return {
       'nameCategory': nameCategory,
-      'codeValue': codeValue,
+      'codeValue': color.toARGB32(),
       'iconCategory': {
-        'codePoint': iconCategory.codePoint,
-        'iconFamily': iconCategory.fontFamily,
+        'codePoint': iconCategory['codePoint'],
+        'iconFamilly': iconCategory['iconfamilly'],
       },
     };
   }

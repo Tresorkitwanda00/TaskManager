@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>242249454882-hn3r750tn8opht2sh7m8longomolfqft.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.242249454882-hn3r750tn8opht2sh7m8longomolfqft</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>242249454882-m6h1bk8n7jbujj8tqnj1v1mml8hptpaa.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDC802g67wiu-i-na5VRCyiCiQJ9DJsYSM</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.trezkit.uptodo</string>
+	<string>com.example.uptodo</string>
 	<key>PROJECT_ID</key>
 	<string>uptodo-40e3f</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:242249454882:ios:f5a63c68c97fef9a98817b</string>
+	<string>1:242249454882:ios:17cfbea3f78c25af98817b</string>
 </dict>
 </plist>

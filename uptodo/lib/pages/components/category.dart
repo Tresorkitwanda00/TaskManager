@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uptodo/models/categorie.dart';
+import 'package:uptodo/pages/components/form_add_category.dart';
 import 'package:uptodo/services/categorie_controller.dart';
 
 // 🔹 Widget principal
@@ -64,6 +64,7 @@ class _CategoryModelState extends State<CategoryModel> {
                         onTap: () {
                           setState(() {
                             selectedCategory = category;
+                            print(selectedCategory!.nameCategory);
                             Navigator.pop(context, selectedCategory);
                           });
                         },
@@ -72,12 +73,16 @@ class _CategoryModelState extends State<CategoryModel> {
                             Container(
                               width: 64,
                               height: 64,
-                              color: category.codeValue != 0
-                                  ? Color(category.codeValue)
+                              color: category.color.toARGB32() != 0
+                                  ? Color(category.color.toARGB32())
                                   : Color(0xffAFAFAF),
                               child: Center(
                                 child: Icon(
-                                  category.iconCategory,
+                                  IconData(
+                                    category.iconCategory['codePoint'],
+                                    fontFamily:
+                                        category.iconCategory['iconfamilly'],
+                                  ),
                                   size: 28,
                                   color: Colors.white,
                                 ),
@@ -111,8 +116,12 @@ class _CategoryModelState extends State<CategoryModel> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder:(context)=>
-                        form))
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FormAddCategory(),
+                          ),
+                        );
                       },
                       child: const Text(
                         "Add Category",

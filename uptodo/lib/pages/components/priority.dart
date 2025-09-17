@@ -52,6 +52,7 @@ class _PriorityState extends State<Priority> {
                     onTap: () {
                       setState(() {
                         selectedPriority = priority;
+                        print(selectedPriority);
                       });
                     },
                     child: Container(
