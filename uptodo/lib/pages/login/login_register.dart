@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:uptodo/models/user.dart';
 import 'package:uptodo/pages/dashboard_screen.dart';
+import 'package:uptodo/services/auth_controller.dart';
 
 class LoginRegister extends StatefulWidget {
   const LoginRegister({super.key});
@@ -10,20 +13,31 @@ class LoginRegister extends StatefulWidget {
 
 class _LoginRegisterState extends State<LoginRegister> {
   bool islogin = true;
+  final _globalKey = GlobalKey<FormState>();
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
+  final cls = AuthController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff121212),
+        elevation: 0,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Image.asset('assets/images/BackButton.png'),
+          icon: FaIcon(
+            FontAwesomeIcons.angleLeft,
+            size: 24,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -59,6 +73,17 @@ class _LoginRegisterState extends State<LoginRegister> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
+                        controller: username,
+                        validator: (value) {
+                          if (username.text.isEmpty || value == null) {
+                            return "Please enter your username";
+                          }
+                          final isRegex = RegExp(r'^[A-Z][a-zA-Z]*[0-9]+$');
+                          if (!isRegex.hasMatch(value)) {
+                            return "username must start with a capital letter and contain at least one number ";
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           hintText: "Enter your Username",
                           hintStyle: TextStyle(
@@ -96,7 +121,40 @@ class _LoginRegisterState extends State<LoginRegister> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
-                        obscureText: true,
+                        controller: password,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "⚠️ Le mot de passe est obligatoire";
+                          }
+
+                          // Vérifie la longueur
+                          if (value.length < 8) {
+                            return "⚠️ Doit contenir au moins 8 caractères";
+                          }
+
+                          // Vérifie chiffre
+                          if (!RegExp(r'[0-9]').hasMatch(value)) {
+                            return "⚠️ Doit contenir au moins un chiffre";
+                          }
+
+                          // Vérifie majuscule et minuscule
+                          if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                            return "⚠️ Doit contenir une majuscule";
+                          }
+                          if (!RegExp(r'[a-z]').hasMatch(value)) {
+                            return "⚠️ Doit contenir une minuscule";
+                          }
+
+                          // Vérifie symbole
+                          if (!RegExp(
+                            r'[!@#\$%^&*(),.?":{}|<>]',
+                          ).hasMatch(value)) {
+                            return "⚠️ Doit contenir un symbole";
+                          }
+
+                          return null; // ✅ Valide
+                        },
+                        obscureText: false,
                         decoration: InputDecoration(
                           hintText: "...............",
                           hintStyle: TextStyle(
@@ -126,7 +184,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Password',
+                          'Password Confirm',
                           style: TextStyle(
                             color: Color(0xffFFFFFF),
                             fontWeight: FontWeight.w400,
@@ -135,7 +193,8 @@ class _LoginRegisterState extends State<LoginRegister> {
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
-                          obscureText: true,
+                          controller: confirmPassword,
+                          obscureText: false,
                           decoration: InputDecoration(
                             hintText: "...............",
                             hintStyle: TextStyle(
@@ -164,14 +223,98 @@ class _LoginRegisterState extends State<LoginRegister> {
                   width: 327,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DashboardScreen(),
-                        ),
+                    // Vérification confirm password si on est en register
+                    onPressed: () async {
+                      // Vérifier si on est en mode inscription et que les mots de passe correspondent
+                      if (!islogin && password.text != confirmPassword.text) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Password and confirm password must be the same",
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+
+                      // Création du UserModel
+                      var user = UserModel(
+                        username: username.text,
+                        password: password.text,
+                        createdAt: DateTime.now(),
+                        lastLogin: DateTime.now(),
                       );
+
+                      try {
+                        String result;
+
+                        if (!islogin) {
+                          // 👉 Mode inscription
+                          result = await cls.signUpWithUsername(user);
+                        } else {
+                          // 👉 Mode connexion
+                          result = await cls.signInWithUsername(user);
+                        }
+
+                        if (!mounted) return;
+
+                        // Résultat OK
+                        if (result == "success") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                islogin
+                                    ? "✅ Login success"
+                                    : "✅ Register success",
+                              ),
+                            ),
+                          );
+
+                          // Après inscription → connexion automatique
+                          if (!islogin) {
+                            final loginResult = await cls.signInWithUsername(
+                              user,
+                            );
+                            if (loginResult != "success") {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("❌ $loginResult")),
+                              );
+                              return;
+                            }
+                          }
+
+                          // Navigation vers Dashboard
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DashboardScreen(),
+                              ),
+                            );
+                          }
+                        } else if (result == "processing") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "⚠️ Operation in progress, please wait",
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Afficher erreur Firebase
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text("❌ $result")));
+                        }
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("❌ Unexpected error: $e")),
+                        );
+                      }
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0x808687E7),
                       foregroundColor: Colors.white,

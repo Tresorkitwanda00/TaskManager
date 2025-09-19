@@ -14,7 +14,7 @@ class CategorieController {
   }
 
   Future<String> addCategory(CategorieTask category) async {
-    if (_isProcessing) return "processing"; // ⚠️ empêche clics multiples
+    if (_isProcessing) return "processing"; //  empêche clics multiples
     _isProcessing = true;
     try {
       final docRef = _db.collection('category').doc(category.nameCategory);
@@ -22,7 +22,7 @@ class CategorieController {
       if (!retry.exists) {
         await docRef.set({
           ...category.toMap(),
-          'created': FieldValue.serverTimestamp(), // ✅ enregistre la date/heure
+          'created': FieldValue.serverTimestamp(), // enregistre la date/heure
         });
         return 'saved';
       } else {

@@ -20,6 +20,7 @@ class _StartScreenState extends State<StartScreen> {
           },
           icon: Image.asset('assets/images/BackButton.png'),
         ),
+        elevation: 0,
       ),
       body: Column(
         children: [
